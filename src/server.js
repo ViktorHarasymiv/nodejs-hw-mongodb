@@ -5,7 +5,9 @@ import dotenv from 'dotenv';
 import pino from 'pino-http';
 import cors from 'cors';
 
-import studentsRouter from './routers/contacts.js';
+import cookieParser from 'cookie-parser';
+
+import router from './routers/index.js';
 
 import { getEnvVar } from './utils/getEnvVar.js';
 
@@ -25,6 +27,7 @@ export const startServer = () => {
     }),
   );
   app.use(cors());
+  app.use(cookieParser());
 
   app.use(
     pino({
@@ -40,7 +43,7 @@ export const startServer = () => {
     });
   });
 
-  app.use(studentsRouter);
+  app.use(router);
 
   app.use(notFoundHandler);
 
