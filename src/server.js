@@ -7,7 +7,9 @@ import cors from 'cors';
 
 import cookieParser from 'cookie-parser';
 
-import router from './routers/index.js';
+// import router from './routers/index.js';
+
+import contactsRouter from './routers/contacts.js';
 
 import { getEnvVar } from './utils/getEnvVar.js';
 
@@ -26,6 +28,7 @@ export const startServer = () => {
       limit: '100kb',
     }),
   );
+
   app.use(cors());
   app.use(cookieParser());
 
@@ -43,7 +46,7 @@ export const startServer = () => {
     });
   });
 
-  app.use(router);
+  app.use(contactsRouter);
 
   app.use(notFoundHandler);
 
