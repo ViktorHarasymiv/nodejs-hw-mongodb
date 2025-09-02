@@ -40,13 +40,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "phoneNumber",
-                  "email",
-                  "isFavourite",
-                  "contactType"
-                ],
+                "required": ["name", "phoneNumber", "contactType"],
                 "properties": {
                   "name": {
                     "description": "Contact's name",
@@ -77,7 +71,8 @@
                   "photo": {
                     "description": "Contact's photo",
                     "type": "string",
-                    "example": "https://res.cloudinary.com/dcmbg0k5a/image/upload/v1756425071/ryfaxae0wuh9hyipzhv3.jpg"
+                    "format": "binary",
+                    "example": "https://res.cloudinary.com/dcmbg0k5a/image/upload/v1756425371/ryfaxae0wuh9hyipzhv3.jpg"
                   }
                 }
               }
@@ -236,7 +231,7 @@
     },
     "/contact/{id}": {
       "get": {
-        "tags": ["Contact"],
+        "tags": ["Contacts"],
         "summary": "Get contact by id",
         "operationId": "getContact",
         "description": "Get contact by id",
@@ -288,7 +283,7 @@
         }
       },
       "patch": {
-        "tags": ["Contact"],
+        "tags": ["Contacts"],
         "summary": "Update contact by id",
         "operationId": "UpdateContact",
         "description": "Update contact by id",
@@ -299,15 +294,61 @@
         ],
         "parameters": [
           {
-            "in": "path",
             "name": "id",
+            "in": "path",
             "required": true,
+            "description": "Contact id",
             "schema": {
               "type": "string",
-              "example": "65ca67e7ae7f10c88b598384"
-            }
+              "pattern": "^[0-9a-fA-F]{24}$"
+            },
+            "example": "507f1f77bcf86cd799439011"
           }
         ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "phoneNumber", "contactType"],
+                "properties": {
+                  "name": {
+                    "description": "Contact's name",
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "phoneNumber": {
+                    "description": "Contact's phone number",
+                    "type": "number",
+                    "example": "+380509215077"
+                  },
+                  "email": {
+                    "description": "Contact's email",
+                    "type": "string",
+                    "example": "example@mail.com"
+                  },
+                  "isFavourite": {
+                    "description": "Contact's is Favourite mark",
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "contactType": {
+                    "description": "Contact's type",
+                    "type": "string",
+                    "enum": ["personal", "home", "work"],
+                    "example": "personal"
+                  },
+                  "photo": {
+                    "description": "Contact's photo",
+                    "type": "string",
+                    "format": "binary",
+                    "example": "https://res.cloudinary.com/dcmbg0k5a/image/upload/v1756425371/ryfaxae0wuh9hyipzhv3.jpg"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Update contact by id",
@@ -323,7 +364,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully patch student with id 65ca67e7ae7f10c88b598384!"
+                      "example": "Successfully update student with id 65ca67e7ae7f10c88b598384!"
                     },
                     "data": {
                       "type": "object",
@@ -340,7 +381,7 @@
         }
       },
       "delete": {
-        "tags": ["Contact"],
+        "tags": ["Contacts"],
         "summary": "Delete contact by id",
         "operationId": "deleteContact",
         "description": "Delete contact by id",
@@ -361,25 +402,21 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Delete contact by id",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": ["status", "message"],
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 204
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully patch student with id 65ca67e7ae7f10c88b598384!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/contact"
+                      "example": "Contact deleted successfully"
                     }
                   }
                 }
